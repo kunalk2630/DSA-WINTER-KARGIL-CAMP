@@ -1,0 +1,79 @@
+class Solution {
+public:
+
+/*
+
+    //RECURSION
+    bool f(int idx,vector<int>& nums,int target,vector<vector<int>> &dp){
+
+        if(idx==0){
+
+            return nums[idx]==target;
+        }
+
+        if(target==0){
+
+            return true;
+        }
+
+        if(dp[idx][target]!=-1){
+
+            return dp[idx][target];
+        }
+
+        bool op1=f(idx-1,nums,target,dp);
+        bool op2=false;
+        if(nums[idx]<=target){
+
+            op2=f(idx-1,nums,target-nums[idx],dp);
+        }
+
+        return dp[idx][target]=(op1||op2);
+    }
+
+    */
+    bool canPartition(vector<int>& nums) {
+        
+        int n=nums.size();
+        int sum=0;
+        for(int i=0;i<n;i++){
+
+            sum +=nums[i];
+        }
+        if(sum %2 !=0){
+
+            return false;
+        }
+
+        int target=sum/2;
+
+        vector<vector<bool>> dp(n,vector<bool>(target+1,false));
+
+         for(int i=0;i<n;i++){
+
+            dp[i][0]=true;
+        }
+
+        if(nums[0]<=target){
+
+            dp[0][nums[0]]=true;
+        }
+       
+
+        for(int i=1;i<n;i++){
+
+            for(int j=1;j<=target;j++){
+
+                 bool op1=dp[i-1][j];
+                 bool op2=false;
+                 if(nums[i]<=j){
+
+                     op2=dp[i-1][j-nums[i]];
+                 }
+
+                  dp[i][j]=(op1||op2);
+            }
+        }
+        return dp[n-1][target];
+    }
+};
