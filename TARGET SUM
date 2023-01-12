@@ -1,0 +1,91 @@
+class Solution {
+public:
+    // int f(int idx,int target,vector<int>& nums,vector<vector<int>> &dp){
+
+    //     if(idx==0){
+
+    //         if(target==0 && nums[0]==0){
+
+    //             return 2;
+    //         }
+    //         else if(target==0 || target==nums[0] ){
+
+    //             return 1;
+    //         }
+    //         else{
+    //             return 0;
+    //         }
+    //     }
+
+    //     if(dp[idx][target]!=-1){
+
+    //         return dp[idx][target];
+    //     }
+
+    //     int op1=f(idx-1,target,nums,dp);
+    //     int op2=0;
+    //     if(nums[idx]<=target){
+
+    //         op2=f(idx-1,target-nums[idx],nums,dp);
+
+    //     }
+
+    //     return dp[idx][target]=op1+op2;
+
+    // }
+    int findTargetSumWays(vector<int>& nums, int target) {
+
+        int n=nums.size();
+        int total_sum=0;
+        for(auto &it:nums){
+
+            total_sum +=it;
+        }
+        //x+y=total_sum ,x-y=diff => y=total_sum-diff/2
+
+        if(total_sum-target<0){
+
+            return 0;
+        }
+
+        if((total_sum-target) %2 !=0){
+
+            return 0;
+        }
+
+        int new_target=(total_sum-target)/2;
+
+        vector<vector<int>> dp(n+1,vector<int>(new_target+1,0));
+
+     if(nums[0] == 0) dp[0][0] =2;  // 2 cases -pick and not pick
+    else dp[0][0] = 1;  // 1 case - not pick
+    
+    if(nums[0]!=0 && nums[0]<=new_target) {
+        
+           dp[0][nums[0]] = 1;
+    }
+     
+
+        for(int i=1;i<n;i++){
+
+            for(int j=0;j<=new_target;j++){
+
+                int op1=dp[i-1][j];
+                int op2=0;
+                if(nums[i]<=j){
+
+                     op2=dp[i-1][j-nums[i]];
+
+                 }
+
+                 dp[i][j]=op1+op2;
+
+
+            }
+        }
+
+
+        return dp[n-1][new_target];
+        
+    }
+};
