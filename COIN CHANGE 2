@@ -1,0 +1,73 @@
+class Solution {
+public:
+
+    /*
+    
+    int f(int idx,vector<int>& coins,int amount,vector<vector<int>> &dp){
+        
+        
+
+        //MEMOISATION
+
+        if(idx==0){
+
+            if(amount ==0 || amount%coins[idx]==0){
+
+                return 1;
+            }
+            else{
+
+                return 0;
+            }
+
+
+
+        }
+
+        if(dp[idx][amount]!=-1){
+
+            return dp[idx][amount];
+        }
+
+        int op1=f(idx-1,coins,amount,dp);
+        int op2=0;
+        if(coins[idx]<=amount){
+
+            op2=f(idx,coins,amount-coins[idx],dp);
+        }
+
+        return dp[idx][amount]=op1+op2;
+    }
+
+    */
+
+    int change(int amount, vector<int>& coins) {
+        
+        //TABULATION
+
+        int n=coins.size();
+        vector<vector<int>> dp(n+1,vector<int>(amount+1,0));
+        for(int j=0;j<=amount;j++){
+
+            if(j%coins[0]==0){
+                dp[0][j]=1;
+            }
+        }
+
+        for(int i=1;i<n;i++){
+
+            for(int j=0;j<=amount;j++){
+
+                int op1=dp[i-1][j];
+                int op2=0;
+                if(coins[i]<=j){
+
+                    op2=dp[i][j-coins[i]];
+                }
+
+                 dp[i][j]=op1+op2;
+            }
+        }
+        return dp[n-1][amount];
+    }
+};
